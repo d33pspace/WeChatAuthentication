@@ -14,6 +14,7 @@ using WeChatAuthentication.Models;
 using WeChatAuthentication.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
+using DevZH.AspNetCore.Builder;
 
 namespace WeChatAuthentication
 {
@@ -84,7 +85,11 @@ namespace WeChatAuthentication
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-
+            app.UseWeChatAuthentication(new DevZH.AspNetCore.Builder.WeChatOptions()
+            {
+                AppId = Configuration["Authentication:Wechat:AppId"],
+                AppSecret = Configuration["Authentication:Wechat:AppSecret"],
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
