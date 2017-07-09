@@ -8,36 +8,36 @@ namespace WeChatAuthentication.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.DropIndex(
-            //    name: "IX_AspNetUserRoles_UserId",
-            //    table: "AspNetUserRoles");
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUserRoles_UserId",
+                table: "AspNetUserRoles");
 
-            //migrationBuilder.DropIndex(
-            //    name: "RoleNameIndex",
-            //    table: "AspNetRoles");
+            migrationBuilder.DropIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "RoleNameIndex",
-            //    table: "AspNetRoles",
-            //    column: "NormalizedName",
-            //    unique: true);
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            //migrationBuilder.DropIndex(
-            //    name: "RoleNameIndex",
-            //    table: "AspNetRoles");
+            migrationbuilder.dropindex(
+                name: "rolenameindex",
+                table: "aspnetroles");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "IX_AspNetUserRoles_UserId",
-            //    table: "AspNetUserRoles",
-            //    column: "UserId");
+            migrationbuilder.createindex(
+                name: "ix_aspnetuserroles_userid",
+                table: "aspnetuserroles",
+                column: "userid");
 
-            //migrationBuilder.CreateIndex(
-            //    name: "RoleNameIndex",
-            //    table: "AspNetRoles",
-            //    column: "NormalizedName");
+            migrationbuilder.createindex(
+                name: "rolenameindex",
+                table: "aspnetroles",
+                column: "normalizedname");
         }
     }
 }

@@ -92,6 +92,8 @@ namespace WeChatAuthentication.Controllers
             return View(model);
         }
 
+
+
         //
         // GET: /Account/Register
         [HttpGet]
