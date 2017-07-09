@@ -25,16 +25,16 @@ namespace WeChatAuthentication.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationbuilder.dropindex(
+            migrationBuilder.DropIndex(
                 name: "rolenameindex",
                 table: "aspnetroles");
 
-            migrationbuilder.createindex(
+            migrationBuilder.CreateIndex(
                 name: "ix_aspnetuserroles_userid",
                 table: "aspnetuserroles",
                 column: "userid");
 
-            migrationbuilder.createindex(
+            migrationBuilder.CreateIndex(
                 name: "rolenameindex",
                 table: "aspnetroles",
                 column: "normalizedname");
