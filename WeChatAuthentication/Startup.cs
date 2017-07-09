@@ -87,9 +87,10 @@ namespace WeChatAuthentication
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
             app.UseWeChatAuthentication(new DevZH.AspNetCore.Builder.WeChatOptions()
             {
-                AppId = Configuration["Authentication:Wechat:TestAppId"],
-                AppSecret = Configuration["Authentication:Wechat:TestAppSecret"],
+                AppId = Configuration.GetConnectionString("WechatTestAppId"),
+                AppSecret = Configuration.GetConnectionString("WechatTestAppSecret"),
             });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

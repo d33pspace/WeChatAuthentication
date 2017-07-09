@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             AuthenticationScheme = WeChatDefaults.AuthenticationScheme;
             DisplayName = AuthenticationScheme;
-            CallbackPath = new PathString("/signin-wechat");
+            CallbackPath = "https://freshpay.net/Alipay/redirect"; // new PathString("/Alipay/redirect");
             StateAddition = "#wechat_redirect";
             AuthorizationEndpoint = WeChatDefaults.AuthorizationEndpoint;
             TokenEndpoint = WeChatDefaults.TokenEndpoint;
