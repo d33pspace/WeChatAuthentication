@@ -22,9 +22,17 @@ namespace WeChatAuthentication.Controllers
             return View();
         }
 
+        [HttpGet]
         public string Redirect()
         {
             return Request.Query["echostr"];
+        }
+
+        [HttpGet]
+        public IActionResult Success()
+        {
+
+            return View();
         }
 
         public IActionResult Error()
