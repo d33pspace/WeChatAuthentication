@@ -86,8 +86,8 @@ namespace WeChatAuthentication
 
             app.UseWeChatAuthentication(new DevZH.AspNetCore.Builder.WeChatOptions()
             {
-                AppId = Configuration.GetConnectionString("WechatTestAppId"),
-                AppSecret = Configuration.GetConnectionString("WechatTestAppSecret"),
+                AppId = Configuration.GetConnectionString("WechatAppId"),
+                AppSecret = Configuration.GetConnectionString("WechatAppSecret"),
                 CallbackPath = "/wechat/redirect",
                 Scope = { "snsapi_login" },      
             });
