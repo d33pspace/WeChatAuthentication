@@ -29,6 +29,12 @@ namespace WeChatAuthentication.Controllers
         }
 
         [HttpGet]
+        public string Callback()
+        {
+            return Request.Query["echostr"];
+        }
+
+        [HttpGet]
         public IActionResult Success()
         {
 
