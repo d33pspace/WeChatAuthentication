@@ -15,6 +15,7 @@ using WeChatAuthentication.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using DevZH.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace WeChatAuthentication
 {
@@ -84,11 +85,26 @@ namespace WeChatAuthentication
 
             app.UseIdentity();
 
+            app.UseCookieAuthentication(
+                new CookieAuthenticationOptions
+                {
+                    LoginPath = new PathString("/Wechat/Callback"),
+                    AuthenticationScheme = "MyCookieMiddlewareInstance",
+                    AccessDeniedPath = new PathString("/Home/Index"),
+                }
+            );
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+            });
+
             app.UseWeChatAuthentication(new DevZH.AspNetCore.Builder.WeChatOptions()
             {
                 AppId = Configuration.GetConnectionString("WechatAppId"),
                 AppSecret = Configuration.GetConnectionString("WechatAppSecret"),
-                CallbackPath = "/wechat/redirect",
+                //CallbackPath = "/wechat/callback",
                 Scope = { "snsapi_login" },      
             });
 
