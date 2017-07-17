@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Rewrite;
 using DevZH.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
 
 namespace WeChatAuthentication
 {
@@ -26,11 +27,11 @@ namespace WeChatAuthentication
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("config.json");
 
             if (env.IsDevelopment())
             {
-                // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
                 builder.AddUserSecrets<Startup>();
             }
 
@@ -40,10 +41,8 @@ namespace WeChatAuthentication
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -88,11 +87,35 @@ namespace WeChatAuthentication
             app.UseCookieAuthentication(
                 new CookieAuthenticationOptions
                 {
-                    LoginPath = new PathString("/Wechat/Callback"),
+                    LoginPath = new PathString("/wechat/callback"),
                     AuthenticationScheme = "MyCookieMiddlewareInstance",
                     AccessDeniedPath = new PathString("/Home/Index"),
                 }
             );
+
+            app.Map("/callback", callback =>
+            {
+                callback.Run(async context =>
+                {
+                    var authType = context.Request.Query["authscheme"];
+                    if (!string.IsNullOrEmpty(authType))
+                    {
+                        // By default the client will be redirect back to the URL that issued the challenge (/login?authtype=foo),
+                        // send them to the home page instead (/).
+                        await context.Authentication.ChallengeAsync(authType, new AuthenticationProperties() { RedirectUri = "/" });
+                        return;
+                    }
+
+                    context.Response.ContentType = "text/html";
+                    await context.Response.WriteAsync("<html><body>");
+                    await context.Response.WriteAsync("Choose an authentication scheme: <br>");
+                    foreach (var type in context.Authentication.GetAuthenticationSchemes())
+                    {
+                        await context.Response.WriteAsync("<a href=\"?authscheme=" + type.AuthenticationScheme + "\">" + (type.DisplayName ?? "(suppressed)") + "</a><br>");
+                    }
+                    await context.Response.WriteAsync("</body></html>");
+                });
+            });
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -100,12 +123,12 @@ namespace WeChatAuthentication
                 AutomaticChallenge = true,
             });
 
-            app.UseWeChatAuthentication(new DevZH.AspNetCore.Builder.WeChatOptions()
+            app.UseWeChatAuthentication(new WeChatOptions()
             {
-                AppId = Configuration.GetConnectionString("WechatAppId"),
-                AppSecret = Configuration.GetConnectionString("WechatAppSecret"),
-                //CallbackPath = "/wechat/callback",
-                Scope = { "snsapi_login" },      
+                AppId = Configuration["wechat:appid"],
+                AppSecret = Configuration["wechat:appsecret"],
+                CallbackPath = "/wechat/redirect/",
+                Scope = { "snsapi_login" },
             });
 
             app.UseMvc(routes =>
