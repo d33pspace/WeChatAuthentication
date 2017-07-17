@@ -88,7 +88,7 @@ namespace WeChatAuthentication
             {
                 AppId = Configuration.GetConnectionString("WechatAppId"),
                 AppSecret = Configuration.GetConnectionString("WechatAppSecret"),
-                CallbackPath = "/wechat/callback",
+                CallbackPath = "/wechat/redirect",
                 Scope = { "snsapi_login" },      
             });
 
