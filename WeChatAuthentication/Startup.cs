@@ -125,8 +125,8 @@ namespace WeChatAuthentication
 
             app.UseWeChatAuthentication(new WeChatOptions()
             {
-                AppId = Configuration["wechat:appid"],
-                AppSecret = Configuration["wechat:appsecret"],
+                AppId = Configuration["wechat:testappid"],
+                AppSecret = Configuration["wechat:testappsecret"],
                 CallbackPath = "/wechat/redirect/",
                 Scope = { "snsapi_login" },
             });
